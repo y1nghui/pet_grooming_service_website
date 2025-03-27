@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #F9F2EB;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .user_card {
+            width: 350px;
+            background: rgb(109, 70, 72);
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+        #form-title {
+            margin-top: 15px;
+			margin-bottom: 35px;
+            color: #FFF;
+            text-align: center;
+			font-size: 28px;
+        }
+		.input_with_icon {
+			position: relative;
+			padding-left: 40px;
+			margin-bottom: 20px;
+		}
+
+		.input_with_icon i {
+			position: absolute;
+			left: 55px;
+			top: 50%;
+			transform: translateY(-50%);
+			color:#eaa73a;
+		}
+
+		.input_with_icon input {
+			width: calc(100% - 30%); 
+			height: 40px; 
+			border: 1px solid #ccc;
+			border-radius: 5px; 
+			outline: none; 
+			font-size: 15px;
+			padding-right: 0px; 
+			padding-left: 45px;
+		}
+        
+        .login_btn {
+            width: 40%;
+			height: 38px;
+            background: #f7ba5b;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+			display: block;
+			margin: 0 auto;
+			font-size: 18px;
+			font-family: 'Trebuchet MS';
+			text-align: center;
+			margin-top: 25px;
+			margin-bottom: 30px;
+
+        }
+        #messages {
+            background-color: grey;
+            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+			border-radius: 5px;
+        }
+        p {
+            color: rgb(164, 160, 160);
+            margin-bottom: 0;
+			text-align: center;
+			font-size: 14px;
+        }
+
+		p a {
+			color: red;
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="user_card">
+            <h3 id="form-title">LOGIN</h3>
+            <form method="POST" action="">
+                {% csrf_token %}
+				<div class="input_with_icon">
+					<i class="fa fa-user"></i>
+					<input type="text" name="username" placeholder="Username.." required>
+				</div>
+				<div class="input_with_icon">
+					<i class="fa fa-key"></i>
+					<input type="password" name="password" placeholder="Password.." required>
+				</div>
+                <div class="d-flex justify-content-center mt-3 login_container">
+                    <input class="login_btn" type="submit" value="Login">
+                </div>
+            </form>
+            {% for message in messages %}
+                <p id="messages">{{ message }}</p>
+            {% endfor %}
+            <div class="mt-4">
+                <div class="d-flex justify-content-center links">
+                    <p>Don't have an account? <a href="{% url 'register' %}" class="ml-2">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="calendar-container">
+    <div id="calendar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/dayjs"></script>
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+
+<style>
+    #calendar-container {
+        width: 70%; 
+        margin: 40px auto; 
+        padding: 20px; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffffc3; 
+        border-radius: 10px;
+    }
+
+    #calendar {
+        width: 100%; 
+        max-width: 100%; 
+    }
+    
+    
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: '{% url "all_bookings" %}', 
+      eventDisplay: 'auto',
+      height: 'auto',  
+      contentHeight: 'auto',
+      eventClick: function(info) {
+        const details = info.event.extendedProps.details;
+        if (details) {
+          let message = 'Booking Details:\n';
+
+          if (details.Service === 'Hair Grooming' || details.Service === 'Bath and Dry' || details.Service === 'Pet Daycare') {
+            message += `BOOKINGID: ${details.id}\n`;
+            message += `Service: ${details.Service}\n`;
+            message += `Pet: ${details.Pets}\n`;
+            message += `Date: ${details.Date}\n`;
+            message += `Time: ${details.Time}\n`;
+          } else if (details.Service === 'Pet Hotel' ) {
+            message += `BOOKINGID: ${details.id}\n`;
+            message += `Service: ${details.Service}\n`;
+            message += `Checkin: ${details.Checkin}\n`;
+            message += `Checkout: ${details.Checkout}\n`;
+            message += `Pet: ${details.Pets}\n`;
+            if (details.Room && details.Room.name) {
+              message += `Room Name: ${details.Room.name}\n`;
+            }
+          }
+
+          alert(message.trim());  
+        }
+      }
+    });
+
+    calendar.render();
+});
+</script>
+
+{% endblock %}

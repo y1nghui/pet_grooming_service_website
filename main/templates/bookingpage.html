@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    form .form-group {
+        margin-bottom: 15px;
+    }
+
+    form label {
+        display: block;
+        font-weight: bold;
+    }
+
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="date"],
+    form input[type="time"],
+    #id_pet,
+    #id_service,
+    #id_checkin,
+    #id_checkout {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    form input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .button-container {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    #messages {
+        background-color: grey;
+        color: #fff;
+        padding: 10px;
+        margin-top: 10px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    .hidden {
+        display: none;
+    }
+    .time-choice {
+    margin-right: 10px;  
+    margin-bottom: 10px;
+    padding: 8px 12px;   
+    font-size: 14px;   
+    border: 1px solid #ccc;  
+    border-radius: 4px; 
+    cursor: pointer;    
+    transition: background-color 0.3s ease; 
+    }
+
+    .time-choice:hover {
+        background-color: #f0f0f0; 
+    }
+    .time-choice.selected {
+        background-color: #63baf5; 
+        color: #fff;
+    }
+    .time-choice:focus,
+    .time-choice:active {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    .view{
+        text-align: right;
+        font-size: large;
+    }
+    
+</style>
+
+<div class="container">
+    <h1>Booking</h1>
+    <div class="view">
+        <a href="{% url 'customer_booking' %}" class="button">View Booking</a>
+    </div>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_pet">Pet:</label>
+            {{ form.pet }}
+        </div>
+        <div class="form-group">
+            <label for="id_service">Service:</label>
+            {{ form.service }}
+        </div>
+        <div class="form-group" id="date-field">
+            <label for="id_date">Date:</label>
+            {{ form.date }}
+        </div>
+        <div class="form-group hidden" id="time-field">
+            <label for="id_time">Time:</label>
+            <div id="time-buttons">
+                {% for choice in form.time.choices %}
+                    <button type="button" class="time-choice btn btn-outline-primary" data-value="{{ choice.0 }}">{{ choice.1 }}</button>
+                {% endfor %}
+            </div>
+            <p id="fully-booked-message" style="color: red; font-weight: bold;"></p>
+            {{ form.time }}
+        </div>     
+        <div class="form-group hidden" id="checkin-field">
+            <label for="id_checkin">Check-in:</label>
+            {{ form.checkin }}
+        </div>
+        <div class="form-group hidden" id="checkout-field">
+            <label for="id_checkout">Check-out:</label>
+            {{ form.checkout }}
+        </div>
+
+        <div class="button-container">
+            <input type="submit" value="Save Booking">
+        </div>
+
+        {% for message in messages %}
+        <p id="messages">{{ message }}</p>
+        {% endfor %}
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    function updateTimes() {
+        var service = $('#id_service').val();
+        var date = $('#id_date').val();
+
+        if (service && date) {
+            $.ajax({
+                url: '{% url "update_times" %}',
+                data: {
+                    'service': service,
+                    'date': date
+                },
+                success: function(data) {
+                    var timeButtons = $('#time-buttons');
+                    timeButtons.empty();
+                    
+                    if ($.isEmptyObject(data.available_times)) {
+                        // Display message when no time slots are available
+                        $('#fully-booked-message').text('All time slots are fully booked at this time.');
+                    } else {
+                        // Append available time slots as buttons
+                        $.each(data.available_times, function(key, value) {
+                            var button = $('<button></button>')
+                                .attr('type', 'button')
+                                .addClass('time-choice btn btn-outline-primary')
+                                .attr('data-value', key)
+                                .text(value);
+                            timeButtons.append(button);
+                        });
+                        $('#fully-booked-message').empty();
+                    }
+                }
+            });
+        }
+    }
+
+    function toggleFields() {
+        var service = $('#id_service').val();
+
+        if (service === 'Pet Hotel') {
+            $('#date-field').addClass('hidden');
+            $('#time-field').addClass('hidden');
+            $('#checkin-field').removeClass('hidden');
+            $('#checkout-field').removeClass('hidden');
+        } else {
+            $('#date-field').removeClass('hidden');
+            $('#time-field').removeClass('hidden');
+            $('#checkin-field').addClass('hidden');
+            $('#checkout-field').addClass('hidden');
+            updateTimes(); 
+        }
+    }
+
+    $(document).on('click', '.time-choice', function() {
+        $('.time-choice').removeClass('selected');
+        
+        $(this).addClass('selected');
+        
+        var selectedTime = $(this).data('value');
+        $('#id_time').val(selectedTime);
+    });
+
+    $('#id_service').change(toggleFields);
+    $('#id_date').change(updateTimes);
+
+    toggleFields();
+    updateTimes();
+});
+
+</script>
+
+{% endblock %}

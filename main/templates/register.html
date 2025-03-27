@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #F9F2EB;
+            font-family: Arial, sans-serif;
+			display: flex;
+    		justify-content: center;
+    		align-items: center;
+        }
+        .user_card {
+            width: 350px;
+            margin: auto;
+            background: #6D4648;
+            padding: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+            color: #FFF;
+        }
+        .form_container {
+            margin-top: 20px;
+        }
+        #form-title {
+            margin-top: 15px;
+			margin-bottom: 40px;
+            color: #FFF;
+            text-align: center;
+			font-size: 28px;
+        }
+        
+        .register_btn {
+            width: 40%;
+			height: 40px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #F7BA5B;
+            color: #FFF;
+            cursor: pointer;
+			display: block;
+			margin: 0 auto;
+			font-size: 18px;
+			font-family: 'Trebuchet MS';
+			text-align: center;
+			margin-top: 25px;
+			margin-bottom: 30px;
+
+        }
+
+        p {
+            color: rgb(164, 160, 160);
+            margin-bottom: 0%;
+			text-align: center;
+			font-size: 14px;
+
+        }
+
+		p a {
+			color: red;
+		}
+
+		.input_with_icon {
+			position: relative;
+			padding-left: 40px;
+			margin-bottom: 20px;
+		}
+
+		.input_with_icon i {
+			position: absolute;
+			left: 55px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #eaa73a;
+		}
+
+		.input_with_icon input {
+			width: calc(100% - 30%); 
+			height: 40px; 
+			border: 1px solid #ccc; 
+			border-radius: 5px; 
+			outline: none; 
+			font-size: 15px; 
+			padding-right: 0px; 
+			padding-left: 45px;
+		}
+
+		
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="user_card">
+            <h3 id="form-title">REGISTER ACCOUNT</h3>
+            <div class="form_container">
+                <form method="POST" action="">
+                    {% csrf_token %}
+					<div class="input_with_icon">
+						<i class="fa fa-user"></i>
+						<input type="text" name="username" placeholder="Username.." required>
+					</div>
+					<div class="input_with_icon">
+						<i class="fa fa-envelope"></i>
+						<input type="email" name="email" placeholder="Email.." required>
+					</div>
+					<div class="input_with_icon">						
+						<i class="fa fa-key"></i>
+						<input type="password" name="password1" placeholder="Enter password..." required>
+					</div>
+					<div class="input_with_icon">
+						<i class="fa fa-key"></i>
+						<input type="password" name="password2" placeholder="Re-enter Password..." required>
+					</div>
+					
+                    <input class="register_btn" type="submit" value="Register">
+                </form>
+            </div>
+            {{ form.errors }}
+            <div>
+                <p>Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

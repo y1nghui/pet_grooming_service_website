@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+<div class="link">
+    <a href="{% url 'admin_dashboard'  %}">Admin dashboard</a> >
+    <a href="{% url 'timetable' %}">timetable</a>
+
+</div>
+
+<div id="calendar-container">
+    <div id="calendar"></div>
+    <!-- <div id="button-container">
+        <button id="save-button" class="btn btn-primary">Save Changes</button>
+    </div> -->
+    <div id="legend">
+    <div class="legend-item hair-grooming">Hair Grooming</div>
+    <div class="legend-item bath-dry">Bath and Dry</div>
+    <div class="legend-item daycare-full">Daycare Full Day</div>
+    <div class="legend-item daycare-morning">Daycare Morning</div>
+    <div class="legend-item daycare-noon">Daycare Noon</div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/dayjs"></script>
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+
+<style>
+    #calendar-container {
+        width: 70%;
+        margin: 40px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffffc3;
+        border-radius: 10px;
+    }
+
+    #calendar {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .fc-event-title {
+        color: black;
+        font-size: larger;
+    }
+
+    .fc-timegrid-slot {
+        height: 50px !important;
+    }
+
+    #legend {
+        width: 70%;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    .legend-item {
+        display: inline-block;
+        margin: 5px;
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .hair-grooming {
+        background-color: #AFEEEE;
+    }
+
+    .bath-dry {
+        background-color: #87CEFA;
+    }
+
+    .daycare-full {
+        background-color: #f0e130;
+    }
+
+    .daycare-morning {
+        background-color: #4682B4;
+    }
+
+    .daycare-noon {
+        background-color: #FF6347;
+    }
+    .link {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .link a {
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .link a:hover {
+        color: #666;
+        text-decoration: underline;
+    }
+
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        slotDuration: '01:00',
+        slotMinTime: '09:00',
+        slotMaxTime: '18:00',
+        slotLabelFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            meridian: 'short'
+        },
+        allDaySlot: true,
+        allDayText: 'day-care',
+        height: 'auto',
+        expandRows: true,
+        contentHeight: 'auto',
+        events: [],
+        eventClick: function(info) {
+            let message = 'Booking Details:\n';
+            message += `BOOKINGID: ${info.event.id}\n`;
+            message += `Service: ${info.event.extendedProps.service}\n`;
+            message += `Owner: ${info.event.extendedProps.owner}\n`;
+            message += `Date: ${info.event.start.toLocaleDateString()}\n`;
+            message += `Time: ${info.event.start.toLocaleTimeString()}\n`;
+            message += `Pet: ${info.event.extendedProps.pet}\n`;
+
+            alert(message.trim());
+        },
+    });
+
+    calendar.render();
+    fetch("{% url 'get_booking' %}")
+        .then(response => response.json())
+        .then(events => {
+            events.forEach(event => {
+                calendar.addEvent(event);
+            });
+        });
+    });
+
+
+</script>
+{% endblock %}
