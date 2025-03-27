@@ -1,4 +1,4 @@
-# Pet Grooming Service Website
+#Pet Grooming Service Website
 
 A full-stack web application for booking pet grooming services using Django for the backend and HTML/CSS/JavaScript for the frontend.
 This project was built to allow pet owners to easily schedule and manage grooming appointments.
@@ -20,7 +20,7 @@ This project was built to allow pet owners to easily schedule and manage groomin
 ## Screenshots
 
 **Customer View**:
-[Screenshot 2025-03-27 233404](https://github.com/user-attachments/assets/eb0fd905-ae61-4b7b-b1cf-158c0b85a749)
+![Screenshot 2025-03-27 233404](https://github.com/user-attachments/assets/eb0fd905-ae61-4b7b-b1cf-158c0b85a749)
 ![Screenshot 2025-03-27 233522](https://github.com/user-attachments/assets/ba4220fe-b03b-4d71-b353-953cc45e6008)
 ![Screenshot 2025-03-27 233717](https://github.com/user-attachments/assets/d34251e4-3986-4f73-af6c-90e327ea7900)
 
