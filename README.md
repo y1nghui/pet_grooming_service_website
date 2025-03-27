@@ -5,11 +5,11 @@ This project was built to allow pet owners to easily schedule and manage groomin
 
 ## Features
 
-**User Authentication** – Secure login and registration for customers and admins
-**Appointment Booking System** – Customers can submit booking requests, while admins manage approvals
-**Admin Dashboard** – Admins can view, modify, and cancel bookings
-**Service Management** – Admins can create, update, and remove grooming services
-**Responsive UI** – Works on desktop and mobile devices
+- **User Authentication** – Secure login and registration for customers and admins
+- **Appointment Booking System** – Customers can submit booking requests, while admins manage approvals
+- **Admin Dashboard** – Admins can view, modify, and cancel bookings
+- **Service Management** – Admins can create, update, and remove grooming services
+- **Responsive UI** – Works on desktop and mobile devices
 
 ## Technologies Used
 
